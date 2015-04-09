@@ -52,16 +52,17 @@ function render (image) {
   gl.enableVertexAttribArray(positionLocation);
   gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
 
-  //for (var ii = 0; ii < 100; ++ii) {
-    //// random rect
+  for (var ii = 0; ii < 100; ++ii) {
+    // random rect
     setRectangle(
-        gl, 0, 0, image.width, image.height);
-    // random color
+        gl, randomInt(1000), randomInt(1900), randomInt(1000), randomInt(1000));
+        //gl, 0, 0, image.width, image.height);
+     //random color
     gl.uniform4f(colorLocation, Math.random(), Math.random(), Math.random(), 1);
 
-    ////Draw
+    //Draw
     gl.drawArrays(gl.TRIANGLES, 0, 6);
-  //}
+  }
 
   function randomInt(range) {
     return Math.floor(Math.random() * range);
