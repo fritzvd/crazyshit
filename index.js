@@ -2,13 +2,15 @@ function main() {
   var image = new Image();
   image.src = "lachen.jpg";
   image.onload = function () {
-    render(image);
+      render(image);
   }
 }
 
+var gl, colorLocation;
+
 function render (image) {
   var canvas = document.getElementById("webgl-canvas");
-  var gl = canvas.getContext("experimental-webgl");
+  gl = canvas.getContext("experimental-webgl");
 
   var program = createProgramFromScripts(gl, ["2d-vertex-shader", "2d-fragment-shader"]);
   gl.useProgram(program);
@@ -19,7 +21,7 @@ function render (image) {
   var resolutionLocation = gl.getUniformLocation(program, "u_resolution");
   gl.uniform2f(resolutionLocation, canvas.width, canvas.height);
 
-  var colorLocation = gl.getUniformLocation(program, "u_color");
+  colorLocation = gl.getUniformLocation(program, "u_color");
 
   var texCoordLocation = gl.getAttribLocation(program, "a_texCoord");
 
@@ -52,8 +54,13 @@ function render (image) {
   gl.enableVertexAttribArray(positionLocation);
   gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
 
-  for (var ii = 0; ii < 100; ++ii) {
+  //for (var ii = 0; ii < 100; ++ii) {
     // random rect
+ renderImage();
+}
+
+  function renderImage () {
+  for (var ii = 0; ii < 100; ++ii) {
     setRectangle(
         gl, randomInt(1000), randomInt(1900), randomInt(1000), randomInt(1000));
         //gl, 0, 0, image.width, image.height);
@@ -64,9 +71,14 @@ function render (image) {
     gl.drawArrays(gl.TRIANGLES, 0, 6);
   }
 
+    window.requestAnimationFrame(function () {
+        renderImage();
+      });
+  }
+ 
   function randomInt(range) {
     return Math.floor(Math.random() * range);
-  };
+  }
 
   function setRectangle(gl, x, y, width, height) {
     var x1 = x;
@@ -85,6 +97,5 @@ function render (image) {
         ]),
       gl.STATIC_DRAW);
   }
-}
 
 main();
